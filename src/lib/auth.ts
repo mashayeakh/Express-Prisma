@@ -33,5 +33,20 @@ export const auth = betterAuth({
     },
     emailAndPassword: {
         enabled: true,
+        //i dont want use to sinin automatically
+        autoSignIn: false,
+        //every new user must verify email
+        requireEmailVerification: true,
+    },
+    emailVerification: {
+        sendVerificationEmail: async ({ user, url, token }, request) => {
+            // void sendEmail({
+            //     to: user.email,
+            //     subject: "Verify your email address",
+            //     text: `Click the link to verify your email: ${url}`,
+            // });
+
+            console.log("********************** Email send for verification")
+        },
     },
 });
