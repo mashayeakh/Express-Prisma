@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.send("Welcome to Simple Blog API");
 })
 
-app.use("/api/v1", PostRouter);
+app.use("/api/v1/post", PostRouter);
 
 
 

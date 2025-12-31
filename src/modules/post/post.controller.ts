@@ -11,7 +11,10 @@ export const PostController = {
     async createPost(req: Request, res: Response) {
 
         try {
-            const result = await PostService.createPost(req.body);
+            console.log(req.user)
+            console.log(req.user?.id)
+            const result = await PostService.createPost(req.body, req.user?.id as string);
+
             res.status(201).json({
                 success: true,
                 message: "Post created successfully",

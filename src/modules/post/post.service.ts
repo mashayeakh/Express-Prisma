@@ -7,9 +7,11 @@ export const PostService = {
         return "Post Service is working"
     },
 
-    async createPost(payload: Omit<Post, "postId" | "createdAt" | "updatedAt" | "views">) {
+    async createPost(payload: Omit<Post, "postId" | "createdAt" | "updatedAt" | "views" | "authorId">, userId: string) {
 
-        const val = await prisma.post.create({ data: payload })
+        // console.log()
+
+        const val = await prisma.post.create({ data: { ...payload, authorId: userId } })
         return val;
     },
 
