@@ -31,7 +31,12 @@ export const PostController = {
 
     async getAllPost(req: Request, res: Response) {
         try {
-            const result = await PostService.getAllPost();
+            const { search } = req.query;
+            console.log("Req query ---", search)
+
+            const searchStr = typeof search === "string" ? search : undefined;
+
+            const result = await PostService.getAllPost({ search: searchStr });
             res.status(200).json({
                 success: true,
                 message: "Posts retrieved successfully",
