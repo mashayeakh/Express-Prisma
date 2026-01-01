@@ -16,8 +16,11 @@ export const PostService = {
         return val;
     },
 
-    async getAllPost(payload: { search: string | undefined, tags: string[] | [] }) {
-        // const searchPayload = payload.search as string;
+    async getAllPost(payload: {
+        search: string | undefined,
+        tags: string[] | [],
+        isFeatured: boolean | undefined
+    }) {
 
         const andCondi: PostWhereInput[] = [];
 
@@ -54,6 +57,12 @@ export const PostService = {
                     hasEvery: payload.tags as string[],
                 }
             })
+        }
+
+        if (typeof payload.isFeatured === 'boolean') {
+            andCondi.push({
+                isFeatured: payload.isFeatured
+            });
         }
 
         const posts = await prisma.post.findMany({

@@ -31,16 +31,20 @@ export const PostController = {
 
     async getAllPost(req: Request, res: Response) {
         try {
+            //------- for searching 
             const { search } = req.query;
             // console.log("Req query ---", search)
 
-            //for getting tags
+            //------ for getting tags
             const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
-            console.log("----", tags)
-
+            // console.log("----", tags)
             const searchStr = typeof search === "string" ? search : undefined;
 
-            const result = await PostService.getAllPost({ search: searchStr, tags });
+            //-----for getting isFeatured
+            const isFeatured = req.query.isFeatured ? (req.query.isFeatured === 'true' ? true : req.query.isFeatured === 'false' ? false : undefined) : undefined;
+            console.log(isFeatured) // boolean
+
+            const result = await PostService.getAllPost({ search: searchStr, tags, isFeatured });
             res.status(200).json({
                 success: true,
                 message: "Posts retrieved successfully",
