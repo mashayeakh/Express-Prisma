@@ -20,7 +20,12 @@ export const PostService = {
         search: string | undefined,
         tags: string[] | [],
         isFeatured: boolean | undefined,
-        status: PostStatus | undefined
+        status: PostStatus | undefined,
+        page: number,
+        limit: number,
+        skip: number,
+        sortBy: string | undefined,
+        sortOrder: string | undefined
     }) {
 
         const andCondi: PostWhereInput[] = [];
@@ -73,6 +78,13 @@ export const PostService = {
         }
 
         const posts = await prisma.post.findMany({
+            take: payload.limit,
+            skip: payload.skip,
+            orderBy: payload.sortBy && payload.sortOrder ? {
+                [payload.sortBy]: payload.sortOrder
+            } : { createdAt: 'desc' },
+
+
             where: {
                 // //search based on title, content and tags
                 // title: {
