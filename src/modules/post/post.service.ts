@@ -116,5 +116,12 @@ export const PostService = {
                 totalPage: Math.ceil(total / payload.limit),
             }
         }
+    },
+    async getPostById(id: string) {
+        return await prisma.post.findUnique({
+            where: {
+                postId: id,
+            }
+        })
     }
 }

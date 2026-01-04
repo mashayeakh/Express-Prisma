@@ -69,7 +69,7 @@ export const PostController = {
             res.status(200).json({
                 success: true,
                 message: "Posts retrieved successfully",
-                count: result.length,
+                // count: result.length,
                 data: result,
             });
         } catch (error: any) {
@@ -77,6 +77,24 @@ export const PostController = {
                 success: false,
                 message: "Failed to retrieve posts",
                 error: error.message,
+            });
+        }
+    },
+
+    async getPostById(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const result = await PostService.getPostById(id as string);
+            res.status(200).json({
+                success: true,
+                message: "Post retrieved successfully",
+                data: result,
+            });
+        } catch (err: any) {
+            res.status(500).json({
+                success: false,
+                message: "Failed to retrieve post",
+                error: err.message,
             });
         }
     }
