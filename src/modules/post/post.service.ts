@@ -118,10 +118,38 @@ export const PostService = {
         }
     },
     async getPostById(id: string) {
-        return await prisma.post.findUnique({
-            where: {
-                postId: id,
-            }
+
+        // const updateViews = await prisma.post.update({
+        //     where: {
+        //         postId: id,
+        //     },
+        //     data: {
+        //         views: {
+        //             increment: 1, // just use this. it will increment by 1
+        //         }
+        //     }
+        // })
+
+
+
+        //we will be using tracnsaction here to make both the operations work together as we want both to be successful or none.
+        return await prisma.$transaction(async (tx) => {
+            //now we will increment the views when we land to specific post with id
+            updateViews: await tx.post.update({
+                where: {
+                    postId: id,
+                },
+                data: {
+                    views: {
+                        increment: 1, // just use this. it will increment by 1
+                    }
+                }
+            });
+            return await tx.post.findUnique({
+                where: {
+                    postId: id,
+                }
+            })
         })
     }
 }
