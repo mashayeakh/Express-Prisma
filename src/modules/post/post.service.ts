@@ -99,6 +99,22 @@ export const PostService = {
             },
 
         });
-        return posts;
+        const total = await prisma.post.count({
+            where: {
+                AND: andCondi
+            }
+        });
+
+        console.log(payload.page)
+        return {
+            data: posts,
+            // count: posts.length,
+            paginatin: {
+                total: total,
+                page: payload.page,
+                limit: payload.limit,
+                totalPage: Math.ceil(total / payload.limit),
+            }
+        }
     }
 }
