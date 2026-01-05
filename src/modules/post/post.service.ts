@@ -1,4 +1,4 @@
-import { Post, PostStatus } from "../../../generated/prisma/client";
+import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
@@ -148,7 +148,30 @@ export const PostService = {
             return await tx.post.findUnique({
                 where: {
                     postId: id,
-                }
+                },
+                include: {
+                    comments: {
+                        where: {
+                            parentId: null,
+                            status: CommentStatus.APPROVED
+                        },
+                        include: {
+                            replies: {
+                                where: {
+                                    status: CommentStatus.APPROVED
+                                },
+                                include: {
+                                    replies: {
+                                        where: {
+                                            status: CommentStatus.APPROVED
+                                        },
+                                    },
+
+                                }
+                            },
+                        }
+                    }
+                },
             })
         })
     }
