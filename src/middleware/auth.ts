@@ -17,7 +17,7 @@ export const authMiddleware = (...roles: Role[]) => {
         try {
 
             //lets see the header, what is shows
-            console.log("--------", req.headers)
+            // console.log("--------", req.headers)
 
             // Get the current session from Better Auth
             // The session is identified using cookies / headers sent by the client

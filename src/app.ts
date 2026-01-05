@@ -4,6 +4,8 @@ import { PostRouter } from "./modules/post/post.router";
 import { RouteNotFoundRouter } from "./modules/404/404.routes";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
+import { CommentController } from "./modules/comment/comment.controller";
+import { CommentRouter } from "./modules/comment/comment.router";
 
 const app = express();
 
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/v1/post", PostRouter);
+app.use("/api/v1/comment", CommentRouter);
 
 
 
