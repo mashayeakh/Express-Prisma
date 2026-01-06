@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CommentService } from "./comment.service";
 import { PostController } from "../post/post.controller";
+import { REPLCommand } from "node:repl";
 
 export const CommentController = {
     async getTestComment(req: Request, res: Response) {
@@ -50,7 +51,15 @@ export const CommentController = {
         const authorId = req.user?.id;
 
         const { commentId } = req.params;
-        const result = await CommentService.updateComment(commentId as string, authorId as string, req.body );
+        const result = await CommentService.updateComment(commentId as string, authorId as string, req.body);
         res.json(result);
-    }
+    },
+
+    async moderateComment(req: Request, res: Response) {
+
+        const { commentId } = req.params;
+        const result = await CommentService.moderateComment(commentId as string, req.body);
+        res.json(result);
+    },
+
 }

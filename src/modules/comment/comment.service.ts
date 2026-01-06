@@ -1,5 +1,5 @@
-import { CommentStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
+import { CommentStatus } from './../../../generated/prisma/enums';
 
 export const CommentService = {
     async testComment() {
@@ -93,7 +93,7 @@ export const CommentService = {
         }
 
         //check if the comment belongs to the author
-        const isCommentExist = await prisma.comment.findFirst({
+        const isCommentExist = await prisma.comment.findUniqueOrThrow({
             where: {
                 commentId: commentId,
                 author: authorId
@@ -134,7 +134,7 @@ export const CommentService = {
         }
 
         //check if the comment belongs to the author
-        const isCommentExist = await prisma.comment.findFirst({
+        const isCommentExist = await prisma.comment.findUniqueOrThrow({
             where: {
                 commentId: commentId,
                 author: authorId
@@ -157,6 +157,46 @@ export const CommentService = {
 
 
         console.log({ commentId, authorId });
+    },
+
+    //update the status and only admin can do this
+    async moderateComment(commentId: string, data: { status: CommentStatus }) {
+
+        if (!commentId) {
+            throw new Error("Comment ID is required");
+        }
+
+        //check if the comment belongs to the author
+        const isCommentExist = await prisma.comment.findUniqueOrThrow({
+            where: {
+                commentId: commentId,
+            }
+        })
+
+
+        if (isCommentExist.status === data.status) {
+            return { message: "Status is already set to " + data.status };
+        }
+
+        if (isCommentExist) {
+
+            return await prisma.comment.update({
+                where: {
+                    commentId: commentId,
+                },
+                data: {
+                    status: data.status,
+                },
+            })
+        }
+
+        return {
+            message: "not found"
+        }
+
+
+
+        // console.log("comment id", commentId)
     }
 
 }

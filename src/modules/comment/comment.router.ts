@@ -23,5 +23,7 @@ router.delete("/:commentId", authMiddleware(Role.ADMIN, Role.USER), CommentContr
 //update comment by id
 router.put("/:commentId", authMiddleware(Role.ADMIN, Role.USER), CommentController.updateComment);
 
+// update the staus By Admin only
+router.put("/:commentId/moderate", authMiddleware(Role.ADMIN), CommentController.moderateComment);
 
 export const CommentRouter = router;
