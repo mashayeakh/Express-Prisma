@@ -9,9 +9,10 @@ const router = express.Router();
 
 // router.get("/test", PostController.getTest);
 
-router.post("/", authMiddleware(Role.USER), PostController.createPost);
+router.post("/", authMiddleware(Role.USER, Role.ADMIN), PostController.createPost);
 router.get("/", PostController.getAllPost);
 router.get("/:id", PostController.getPostById);
+router.get("/by-author/:author", authMiddleware(Role.USER, Role.ADMIN), PostController.getPostByAuthor);
 
 
 export const PostRouter = router;

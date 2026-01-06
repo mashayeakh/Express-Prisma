@@ -190,5 +190,53 @@ export const PostService = {
                 },
             })
         })
+    },
+
+    async getPostByAuthor(authorId: string) {
+
+        //check if the status is ACTIVE or not. 
+        await prisma.user.findUniqueOrThrow({
+            where: {
+                id: authorId,
+                status: "ACTIVE"
+            },
+            select: {
+                id: true,
+            }
+        })
+
+
+        const result = await prisma.post.findMany({
+            where: {
+                authorId: authorId
+            },
+            include: {
+                _count: {
+                    select: {
+                        comments: true
+                    }
+                }
+            }
+        })
+
+        const count = await prisma.post.count({
+            where: {
+                authorId: authorId
+            },
+        })
+
+        const total = await prisma.post.aggregate({
+            _count: {
+                postId: true,
+            },
+            where: {
+                authorId: authorId
+            }
+        })
+        return {
+            data: result,
+            count: count,
+            total: total
+        }
     }
 }

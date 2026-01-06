@@ -97,6 +97,26 @@ export const PostController = {
                 error: err.message,
             });
         }
-    }
+    },
 
+    async getPostByAuthor(req: Request, res: Response) {
+        try {
+            const user = req?.user;
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+            return res.json({
+                success: true,
+                message: "Post retrieved successfully",
+                data: await PostService.getPostByAuthor(user.id),
+            })
+        } catch (error: any) {
+            res.status(500).json({
+                success: false,
+                message: "Failed to retrieve post",
+                error: error.message,
+            });
+        }
+
+    }
 }
