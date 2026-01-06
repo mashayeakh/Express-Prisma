@@ -58,11 +58,11 @@ model Comment {
   updatedAt DateTime      @updatedAt
 
   postId String
-  post   Post   @relation(fields: [postId], references: [postId])
+  post   Post   @relation(fields: [postId], references: [postId], onDelete: Cascade)
 
   //self relation for replies
   parentId String?
-  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [commentId])
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [commentId], onDelete: Cascade)
   replies  Comment[] @relation("CommentReplies")
 
   @@index([postId])

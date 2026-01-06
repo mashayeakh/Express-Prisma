@@ -61,12 +61,12 @@ export const CommentService = {
             where: {
                 author: author
             },
-            orderBy:{
+            orderBy: {
                 createdAt: "desc"
-            }, 
-            include:{
-                post:{
-                    select:{
+            },
+            include: {
+                post: {
+                    select: {
                         postId: true,
                         title: true,
                     }
@@ -75,6 +75,49 @@ export const CommentService = {
             }
         })
         // console.log("Auhor Id ", author)
+    },
+
+    //delete comment by id
+    //Todo must be logged in 
+    //TODO user should check if the comment belongs to him
+
+    async deleteCommentById(commentId: string, authorId: string) {
+
+        if (!commentId) {
+            throw new Error("Comment ID is required");
+        }
+
+        if (!authorId) {
+            throw new Error("Author ID is required");
+        }
+
+        //check if the comment belongs to the author
+        const isCommentExist = await prisma.comment.findFirst({
+            where: {
+                commentId: commentId,
+                author: authorId
+            }
+        })
+
+        if (isCommentExist) {
+            //delete the delete
+            await prisma.comment.delete({
+                where: {
+                    commentId: commentId,
+                },
+                select: {
+                    commentId: true
+                }
+            })
+            return {
+                message: "Comment deleted"
+            }
+        }
+        return {
+            message: "not found."
+        }
+
+        // console.log({ comment: commentId, author: authorId });
     }
 
 }

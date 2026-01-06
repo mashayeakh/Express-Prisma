@@ -35,5 +35,13 @@ export const CommentController = {
             await CommentService.getCommentsByAuthor(author as string
             )
         )
+    },
+
+    async deleteComment(req: Request, res: Response) {
+        const authorId = req.user?.id;
+        const { commentId } = req.params;
+        const result = await CommentService.deleteCommentById(commentId as string, authorId as string);
+
+        res.json(result);
     }
 }
