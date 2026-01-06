@@ -20,5 +20,8 @@ router.get("/author/:author", CommentController.getCommentsByAuthor);
 //delete comment by id
 router.delete("/:commentId", authMiddleware(Role.ADMIN, Role.USER), CommentController.deleteComment);
 
+//update comment by id
+router.put("/:commentId", authMiddleware(Role.ADMIN, Role.USER), CommentController.updateComment);
+
 
 export const CommentRouter = router;

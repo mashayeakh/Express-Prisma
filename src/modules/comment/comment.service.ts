@@ -1,3 +1,4 @@
+import { CommentStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 export const CommentService = {
@@ -118,6 +119,44 @@ export const CommentService = {
         }
 
         // console.log({ comment: commentId, author: authorId });
+    },
+
+    //update comment by id
+
+    async updateComment(commentId: string, authorId: string, data: { content?: string, commentStatus: CommentStatus }) {
+
+        if (!commentId) {
+            throw new Error("Comment ID is required");
+        }
+
+        if (!authorId) {
+            throw new Error("Author ID is required");
+        }
+
+        //check if the comment belongs to the author
+        const isCommentExist = await prisma.comment.findFirst({
+            where: {
+                commentId: commentId,
+                author: authorId
+            }
+        })
+
+        if (isCommentExist) {
+            //update the comment
+            return await prisma.comment.update({
+                where: {
+                    commentId: commentId,
+                },
+                data: data
+            })
+        }
+
+        return {
+            message: "comment not found."
+        }
+
+
+        console.log({ commentId, authorId });
     }
 
 }

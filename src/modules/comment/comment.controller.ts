@@ -43,5 +43,14 @@ export const CommentController = {
         const result = await CommentService.deleteCommentById(commentId as string, authorId as string);
 
         res.json(result);
+    },
+
+    async updateComment(req: Request, res: Response) {
+        //only logged in user can update comment
+        const authorId = req.user?.id;
+
+        const { commentId } = req.params;
+        const result = await CommentService.updateComment(commentId as string, authorId as string, req.body );
+        res.json(result);
     }
 }
