@@ -12,7 +12,10 @@ const router = express.Router();
 
 router.post("/", authMiddleware(Role.USER, Role.ADMIN), CommentController.createComment);
 
+router.get("/:commentId", CommentController.getCommentsById);
 
+// get comments by author
+router.get("/author/:author", CommentController.getCommentsByAuthor);
 
 
 export const CommentRouter = router;

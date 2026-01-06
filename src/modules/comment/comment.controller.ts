@@ -21,5 +21,19 @@ export const CommentController = {
 
         const result = await CommentService.createComment(req.body);
         res.json(result);
+    },
+
+    async getCommentsById(req: Request, res: Response) {
+        const { commentId } = req.params;
+        const result = await CommentService.getCommentsById(commentId as string);
+        res.json(result);
+    },
+
+    async getCommentsByAuthor(req: Request, res: Response) {
+        const { author } = req.params;
+        res.json(
+            await CommentService.getCommentsByAuthor(author as string
+            )
+        )
     }
 }

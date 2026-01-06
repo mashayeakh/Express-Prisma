@@ -155,21 +155,37 @@ export const PostService = {
                             parentId: null,
                             status: CommentStatus.APPROVED
                         },
+                        orderBy: {
+                            createdAt: 'desc'
+                        },
                         include: {
                             replies: {
                                 where: {
                                     status: CommentStatus.APPROVED
                                 },
+                                orderBy: {
+                                    createdAt: 'asc'
+                                },
                                 include: {
                                     replies: {
+
                                         where: {
                                             status: CommentStatus.APPROVED
+                                        },
+                                        orderBy: {
+                                            createdAt: 'asc'
                                         },
                                     },
 
                                 }
                             },
+                            "_count": {
+                                select: { replies: true }
+                            }
                         }
+                    },
+                    "_count": {
+                        select: { comments: true }
                     }
                 },
             })
