@@ -142,6 +142,28 @@ export const PostController = {
                 error: error.message,
             });
         }
+    },
 
+    async deleteUserPost(req: Request, res: Response) {
+        try {
+            const { postId } = req.params;
+            const user = req?.user;
+            const userId = req.user?.id;
+            const isAdmin = user?.role === "ADMIN"
+
+
+            return res.json({
+                success: true,
+                message: "Post deleted successfully",
+                data: await PostService.deletePostByUser(postId as string, userId as string, isAdmin)
+            })
+        } catch (error: any) {
+            // console.log(error)
+            res.status(500).json({
+                success: false,
+                message: "Failed to delete post",
+                error: error.message,
+            });
+        }
     }
 }

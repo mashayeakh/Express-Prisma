@@ -272,8 +272,39 @@ export const PostService = {
                 ...data
             }
         })
-    }
+    },
 
+    //delete post
+    /**
+     * TODO 1 - user nijer post delete korte parbe
+     * TODO 2 - admin sobar post delete korte parbe  
+     */
+
+    async deletePostByUser(postId: string, authorId: string, isAdmin: boolean) {
+
+
+        const postData = await prisma.post.findFirstOrThrow({
+            where: {
+                postId: postId,
+            },
+            select: {
+                postId: true,
+                authorId: true,
+            }
+        })
+
+        if (!isAdmin && (postData.authorId !== authorId)) {
+            throw new Error("You are not authorized to delete this post");
+        }
+
+        return await prisma.post.delete({
+            where: {
+                postId: postId
+            },
+
+        })
+        // console.log({ postId, userId })
+    }
 
 
 }

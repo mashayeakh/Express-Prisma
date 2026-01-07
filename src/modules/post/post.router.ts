@@ -5,7 +5,7 @@ import { Role } from "../../types/Role";
 import { authMiddleware } from "../../middleware/auth";
 
 const router = express.Router();
-    
+
 
 // router.get("/test", PostController.getTest);
 
@@ -14,6 +14,7 @@ router.get("/", PostController.getAllPost);
 router.get("/:id", PostController.getPostById);
 router.get("/by-author/:author", authMiddleware(Role.USER, Role.ADMIN), PostController.getPostByAuthor);
 router.put("/by-author/:postId", authMiddleware(Role.USER, Role.ADMIN), PostController.updatePostByAuthor);
+router.delete("/delete/:postId", authMiddleware(Role.USER, Role.ADMIN), PostController.deleteUserPost);
 
 
 export const PostRouter = router;
