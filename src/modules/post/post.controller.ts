@@ -118,5 +118,30 @@ export const PostController = {
             });
         }
 
+    },
+
+    async updatePostByAuthor(req: Request, res: Response) {
+        try {
+            const user = req?.user;
+            console.log(user)
+            if (!user) {
+                throw new Error("User not authenticated");
+            }
+            const isAdmin = user.role === "ADMIN"
+            console.log(user)
+            return res.json({
+                success: true,
+                message: "Post updated successfully",
+                data: await PostService.updatePostByAuthor(req.params.postId as string, req.body, user.id, isAdmin),
+            })
+        } catch (error: any) {
+            console.log(error)
+            res.status(500).json({
+                success: false,
+                message: "Failed to update post",
+                error: error.message,
+            });
+        }
+
     }
 }

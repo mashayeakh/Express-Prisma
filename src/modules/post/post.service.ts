@@ -238,5 +238,42 @@ export const PostService = {
             count: count,
             total: total
         }
+    },
+
+    //usser nijer post update korte parbe✅- isFeatured update korte parbe na 
+    // admin sobar post update korte parbe  ✅
+    async updatePostByAuthor(postId: string, data: Partial<Post>, authorId: string, isAdmin: boolean) {
+        const postData = await prisma.post.findFirstOrThrow({
+            where: {
+                postId: postId,
+            },
+            select: {
+                postId: true,
+                authorId: true,
+            }
+        })
+
+        if (!isAdmin && (postData.authorId !== authorId)) {
+            throw new Error("You are not authorized to update this post");
+        }
+
+        // as we have said that user can not update isFeatured field, so we will delete it from the data object if it exists
+
+        if (!isAdmin) {
+            // delete isFeatured from data
+            delete data.isFeatured;
+        }
+
+        return await prisma.post.update({
+            where: {
+                postId: postData.postId
+            },
+            data: {
+                ...data
+            }
+        })
     }
+
+
+
 }
