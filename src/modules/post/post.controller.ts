@@ -1,7 +1,7 @@
 import express, { Response, Request } from "express";
 import { PostService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
-import { string } from "better-auth/*";
+import { string, success } from "better-auth/*";
 import { paginationSortingHelper } from "../../helper/paginationSortingHelper";
 
 export const PostController = {
@@ -162,6 +162,24 @@ export const PostController = {
             res.status(500).json({
                 success: false,
                 message: "Failed to delete post",
+                error: error.message,
+            });
+        }
+    },
+
+    async getStats(req: Request, res: Response) {
+        try {
+            return res.json({
+                success: true,
+                message: "Stats fected successfully",
+                data: await PostService.getStats()
+            })
+
+        } catch (error: any) {
+            console.log(error);
+            res.status(500).json({
+                success: false,
+                message: "Failed to fetch stats",
                 error: error.message,
             });
         }

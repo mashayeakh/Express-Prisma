@@ -304,7 +304,80 @@ export const PostService = {
 
         })
         // console.log({ postId, userId })
+    },
+
+    //get all stats,  num of - 
+    //postCount, publishedPosts, draftPosts, totalComments, totalViews,
+    async getStats() {
+
+        return await prisma.$transaction(async (ts) => {
+
+            const [postCount, published, drafted, archieved, totalComments] = await Promise.all([
+                await ts.post.count(),
+
+                await ts.post.count({
+                    where: {
+                        status: PostStatus.PUBLISHED
+                    }
+                }),
+
+                await ts.post.count({
+                    where: {
+                        status: PostStatus.DRAFT
+                    }
+                }),
+
+                await ts.post.count({
+                    where: {
+                        status: PostStatus.ARCHIVED
+                    }
+                }),
+
+                await ts.comment.count()
+            ])
+
+
+
+            // //postCount
+            // const postCount = 
+
+            // //publishedPosts
+            // const published = await ts.post.count({
+            //     where: {
+            //         status: PostStatus.PUBLISHED
+            //     }
+            // });
+            // console.log("published count ", published);
+
+            // //draftPosts
+            // const drafted = await ts.post.count({
+            //     where: {
+            //         status: PostStatus.DRAFT
+            //     }
+            // });
+            // console.log("Drafted count ", drafted);
+
+            // //archievedPosts
+            // const archieved = await ts.post.count({
+            //     where: {
+            //         status: PostStatus.ARCHIVED
+            //     }
+            // });
+            // console.log("Archieved count ", archieved);
+
+            // //total comments
+            // const totalComments = await ts.comment.count();
+            // console.log("Total comments ", totalComments);
+
+            console.log(postCount, published, drafted, archieved, totalComments)
+
+            return {
+                postCount,
+                published,
+                drafted,
+                archieved,
+                totalComments,
+            }
+        })
     }
-
-
 }
