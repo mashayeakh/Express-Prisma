@@ -1,6 +1,7 @@
 import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
+import { Role } from "../../types/Role";
 
 export const PostService = {
     //test
@@ -312,7 +313,7 @@ export const PostService = {
 
         return await prisma.$transaction(async (ts) => {
 
-            const [postCount, published, drafted, archieved, totalComments] = await Promise.all([
+            const [postCount, published, drafted, archieved, totalComments, approvedComments, totalUser, totalAdmin, userCount, totalViews] = await Promise.all([
                 await ts.post.count(),
 
                 await ts.post.count({
@@ -333,7 +334,33 @@ export const PostService = {
                     }
                 }),
 
-                await ts.comment.count()
+                await ts.comment.count(),
+
+                await ts.comment.count({
+                    where: {
+                        status: CommentStatus.APPROVED
+                    }
+                }),
+
+                await ts.user.count({
+                    where: {
+                        role: Role.USER
+                    }
+                }),
+
+                await ts.user.count({
+                    where: {
+                        role: Role.ADMIN
+                    }
+                }),
+
+                await ts.user.count(),
+
+                await ts.post.aggregate({
+                    _sum: {
+                        views: true,
+                    }
+                })
             ])
 
 
@@ -369,7 +396,7 @@ export const PostService = {
             // const totalComments = await ts.comment.count();
             // console.log("Total comments ", totalComments);
 
-            console.log(postCount, published, drafted, archieved, totalComments)
+            console.log(postCount, published, drafted, archieved, totalComments, approvedComments, totalUser, totalAdmin, userCount, totalViews)
 
             return {
                 postCount,
@@ -377,6 +404,11 @@ export const PostService = {
                 drafted,
                 archieved,
                 totalComments,
+                approvedComments,
+                totalUser,
+                totalAdmin,
+                userCount,
+                totalViews: totalViews._sum.views
             }
         })
     }
