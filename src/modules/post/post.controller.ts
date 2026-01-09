@@ -121,7 +121,7 @@ export const PostController = {
 
     },
 
-    async updatePostByAuthor(req: Request, res: Response) {
+    async updatePostByAuthor(req: Request, res: Response, next: NextFunction) {
         try {
             const user = req?.user;
             console.log(user)
@@ -137,11 +137,12 @@ export const PostController = {
             })
         } catch (error: any) {
             console.log(error)
-            res.status(500).json({
-                success: false,
-                message: "Failed to update post",
-                error: error.message,
-            });
+            // res.status(500).json({
+            //     success: false,
+            //     message: "Failed to update post",
+            //     error: error,
+            // });
+            next(error)
         }
     },
 
