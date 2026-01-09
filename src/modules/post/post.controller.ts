@@ -1,4 +1,4 @@
-import express, { Response, Request } from "express";
+import express, { Response, Request, NextFunction } from "express";
 import { PostService } from "./post.service";
 import { PostStatus } from "../../../generated/prisma/enums";
 import { string, success } from "better-auth/*";
@@ -11,7 +11,7 @@ export const PostController = {
         res.json({ message: result });
     },
 
-    async createPost(req: Request, res: Response) {
+    async createPost(req: Request, res: Response, next: NextFunction) {
 
         try {
             console.log(req.user)
@@ -24,11 +24,12 @@ export const PostController = {
                 data: result,
             });
         } catch (error: any) {
-            res.status(500).json({
-                success: false,
-                message: "Failed to create post",
-                error: error.message,
-            });
+            // res.status(500).json({
+            //     success: false,
+            //     message: "Failed to create post",
+            //     error: error.message,
+            // });
+            next(error);
         }
     },
 

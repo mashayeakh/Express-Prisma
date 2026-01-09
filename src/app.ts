@@ -6,6 +6,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import { CommentController } from "./modules/comment/comment.controller";
 import { CommentRouter } from "./modules/comment/comment.router";
+import { errorHandler } from "./middleware/globalErrorHandler";
 
 const app = express();
 
@@ -26,10 +27,14 @@ app.get("/", (req, res) => {
     res.send("Welcome to Simple Blog API");
 })
 
+
+
 app.use("/api/v1/post", PostRouter);
 app.use("/api/v1/comment", CommentRouter);
 
 
+//global err handler
+app.use(errorHandler)
 
 //404 route
 app.use(RouteNotFoundRouter);
