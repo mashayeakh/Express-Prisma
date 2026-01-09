@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import { PostRouter } from "./modules/post/post.router";
-import { RouteNotFoundRouter } from "./modules/404/404.routes";
+// import { RouteNotFoundRouter } from "./modules/404/404.routes";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import { CommentController } from "./modules/comment/comment.controller";
 import { CommentRouter } from "./modules/comment/comment.router";
 import { errorHandler } from "./middleware/globalErrorHandler";
+import { notFound } from "./middleware/notFound";
 
 const app = express();
 
@@ -37,5 +38,5 @@ app.use("/api/v1/comment", CommentRouter);
 app.use(errorHandler)
 
 //404 route
-app.use(RouteNotFoundRouter);
+app.use(notFound);
 export default app;
