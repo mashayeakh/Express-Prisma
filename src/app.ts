@@ -29,7 +29,6 @@ app.get("/", (req, res) => {
 })
 
 
-
 app.use("/api/v1/post", PostRouter);
 app.use("/api/v1/comment", CommentRouter);
 

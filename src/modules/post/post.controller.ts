@@ -90,7 +90,7 @@ export const PostController = {
                 success: true,
                 message: "Post retrieved successfully",
                 data: result,
-            });
+        });
         } catch (err: any) {
             res.status(500).json({
                 success: false,
@@ -150,7 +150,7 @@ export const PostController = {
         try {
             const { postId } = req.params;
             const user = req?.user;
-            const userId = req.user?.id;
+            const userId = req.user?.id; 
             const isAdmin = user?.role === "ADMIN"
 
 

@@ -1,4 +1,4 @@
-import { CommentStatus, Post, PostStatus } from "../../../generated/prisma/client";
+import { CommentStatus, Post, PostStatus, Prisma } from "../../../generated/prisma/client";
 import { PostWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import { Role } from "../../types/Role";
@@ -134,7 +134,7 @@ export const PostService = {
 
 
         //we will be using tracnsaction here to make both the operations work together as we want both to be successful or none.
-        return await prisma.$transaction(async (tx) => {
+        return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             //now we will increment the views when we land to specific post with id
             updateViews: await tx.post.update({
                 where: {
@@ -311,7 +311,7 @@ export const PostService = {
     //postCount, publishedPosts, draftPosts, totalComments, totalViews,
     async getStats() {
 
-        return await prisma.$transaction(async (ts) => {
+        return await prisma.$transaction(async (ts: Prisma.TransactionClient) => {
 
             const [postCount, published, drafted, archieved, totalComments, approvedComments, totalUser, totalAdmin, userCount, totalViews] = await Promise.all([
                 await ts.post.count(),
